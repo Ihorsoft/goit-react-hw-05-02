@@ -1,22 +1,18 @@
-// src/pages/ProductDetails.jsx
-
-/* import { useParams } from "react-router-dom";
-
-const ProductDetails = () => {
-  const { productId } = useParams();
-  return <div>Now showing product with id - {productId}</div>;
-};
- */
-
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, Link, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { BackLink } from "../components/BackLink";
 import { getProductById } from "../fakeApi";
 
 export default function ProductDetails() {
+  const [loc, setLoc] = useState(useLocation());
   const { id } = useParams();
   const product = getProductById(id);
+  console.log("ProductDetail Location state: ", loc.state);
+  const backLinkHref = loc.state ?? "/products";
 
   return (
     <main>
+      <BackLink to={backLinkHref}>Back to {loc.state.pathname}</BackLink>
       <img src="https://via.placeholder.com/960x240" alt="" />
       <div>
         <h2>
@@ -31,6 +27,19 @@ export default function ProductDetails() {
           praesentium ipsum quos unde voluptatum?
         </p>
       </div>
+      <ul>
+        <li>
+          <Link to="credits" state={loc}>
+            Credits
+          </Link>
+        </li>
+        <li>
+          <Link to="reviews" state={loc}>
+            Reviews
+          </Link>
+        </li>
+      </ul>
+      <Outlet />
     </main>
   );
 }
